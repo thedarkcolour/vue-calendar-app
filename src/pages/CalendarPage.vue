@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { Task, useTaskStore } from '@/stores/tasks'
+import Button from 'primevue/button'
 
 const currentDate = ref(new Date())
 
@@ -55,14 +56,21 @@ const days = computed(() => {
     const nextMonthDays = 7 - last.getDay()
 
     for (let i = 1; i < nextMonthDays; i++) {
-      array.push(
-        new CalendarCell(new Date(last.getFullYear(), last.getMonth(), last.getDate() + i), true)
-      )
+      const nextMonthDay = new Date(last.getFullYear(), last.getMonth(), last.getDate() + i)
+      array.push(new CalendarCell(nextMonthDay, true, tasks.getTasksForDate(nextMonthDay)))
     }
   }
 
   return array
 })
+
+function prevMonth() {
+  currentDate.value = new Date(currentDate.value.setMonth(currentDate.value.getMonth() - 1))
+}
+
+function nextMonth() {
+  currentDate.value = new Date(currentDate.value.setMonth(currentDate.value.getMonth() + 1))
+}
 </script>
 
 <template>
@@ -95,6 +103,10 @@ const days = computed(() => {
         <div class="date-label">{{ day.date.getDate() }}</div>
       </div>
     </div>
+    <div class="calendar-navigation">
+      <Button label="Previous Month" @click="prevMonth"/>
+      <Button label="Next Month" @click="nextMonth"/>
+    </div>
   </div>
 </template>
 
@@ -124,6 +136,10 @@ const days = computed(() => {
   flex-direction: column;
   justify-content: space-between;
   min-height: 100px;
+}
+
+.calendar-cell:hover {
+  transform: scale(1.05);
 }
 
 .date-label {
