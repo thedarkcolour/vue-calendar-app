@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export class Task {
   name: string
-  time: any
+  date: any
   description: string
 }
 
